@@ -1,28 +1,29 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 
 contract EstablishmentAudit is Ownable{
 
    string public EstablishmentId;
-   address public owner;
-   mapping(uint=>bytes32) public AuditLogs;
+   mapping(uint=>string) public AuditLogs;
    
  
-   constructor (string memory _establishmentId, address _owner)  {
+   constructor (string memory _establishmentId, address owner) {
       EstablishmentId = _establishmentId;
-      owner = _owner;
-	}
+      transferOwnership(owner);
+    }
     
-    function registerAuditHash(uint memory auditDate , bytes32 memory auditHash) public onlyOwner returns(bool) {
-		require(AuditLogs[auditDate] == address(0), "Audit Date allready registered");
-		AuditLogs[auditDate] = auditHash;
-		return true;
+    function registerAuditHash(uint auditDate , string memory _auditHash) public onlyOwner returns(bool) {
+	    require(bytes(AuditLogs[auditDate]).length == 0 ,  "Audit Date allready registered");
+        AuditLogs[auditDate] = _auditHash;
+        return true;
         
     }
 	
 	
-	function getAuditHash(uint memory auditDate ) public view returns(bytes32) {
-		require(AuditLogs[auditDate] != address(0), "Audit Date not registered");
+	function getAuditHash(uint auditDate ) public view returns(string memory) {
+        require(bytes(AuditLogs[auditDate]).length != 0,  "Audit Date doesnt exist");
 		return AuditLogs[auditDate];
     }
 	
