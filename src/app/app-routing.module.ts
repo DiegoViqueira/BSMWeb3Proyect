@@ -1,23 +1,35 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { AuditRecordComponent } from './pages/audit/audit-record/audit-record.component';
-import { AddDocumentComponent } from './pages/establishment/add-document/add-document.component';
-import { AddEstablishmentComponent } from './pages/establishment/add-establishment/add-establishment.component';
+import { AuthGuardGuard } from './guards/auth-guard.guard';
 
 const routes: Routes = [
-  {path : 'auth/login', component : LoginComponent},
-  {path : 'establishment/AddEstablishment', component : AddEstablishmentComponent},
-  {path : 'establishment/AddDocument', component : AddDocumentComponent},
-  {path : 'audit/AuditRecord', component : AuditRecordComponent},
   {
     path: '',
-    redirectTo: 'auth/login',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'add-establishment',
+    loadChildren: () => import('./pages/add-establishment/add-establishment.module').then( m => m.AddEstablishmentPageModule),
+    canLoad: [AuthGuardGuard]
+  },
+  {
+    path: 'add-document',
+    loadChildren: () => import('./pages/add-document/add-document.module').then( m => m.AddDocumentPageModule),
+    canLoad: [AuthGuardGuard]
+  },
+  {
+    path: 'audit-record',
+    loadChildren: () => import('./pages/audit-record/audit-record.module').then( m => m.AuditRecordPageModule),
+    canLoad: [AuthGuardGuard]
+  },
+  {
+    path: 'log-out',
+    loadChildren: () => import('./pages/log-out/log-out.module').then( m => m.LogOutPageModule)
   }
 ];
 
@@ -25,6 +37,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers:[AuthGuardGuard]
 })
 export class AppRoutingModule {}
