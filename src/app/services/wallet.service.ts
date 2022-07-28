@@ -37,7 +37,7 @@ export class WalletService {
     var web3 = await this.initWeb3Metamask();
     const toast =  await this.toastController.create({
       message: 'Cant Connect to Metamask..',
-      duration: 2000,
+      duration: 4000,
       color:"warning"
   });
     var balance = await web3.eth.getBalance(address).then((result:any) => {
@@ -65,7 +65,7 @@ export class WalletService {
 
     const toast =  await this.toastController.create({
         message: 'Cant Connect to BlockChain..',
-        duration: 2000,
+        duration: 4000,
         color:"warning"
     });
 

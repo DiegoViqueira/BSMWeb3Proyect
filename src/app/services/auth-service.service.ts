@@ -28,6 +28,7 @@ export class AuthServiceService {
  async login( seeds): Promise<boolean> {
 
     const tempWallet = await this.walletService.initWallet(seeds);
+    console.log( tempWallet)
     this.wallet.next(tempWallet as Wallet);
     this.isAuthenticated.next(true);
     return true;
