@@ -18,7 +18,6 @@ export class AuthServiceService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   wallet: BehaviorSubject<Wallet> = new BehaviorSubject<Wallet>(null);
  
-  encrypted:string|null = '';
   window: any;
  
   constructor(@Inject(DOCUMENT) private document: Document , public alertController: AlertController , private walletService :WalletService ) {
@@ -30,30 +29,8 @@ export class AuthServiceService {
      return this.wallet;
   }
 
- async login( seeds, password): Promise<boolean> {
+ async login( seeds): Promise<boolean> {
 
-    if (!Mnemonic.isValid(seeds)) {
-      const alert = await this.alertController.create({
-        message: "Las semillas no son validas",
-        buttons: ['OK']
-      });
-  
-      await alert.present();
-
-      return false;
-    }
-
-    this.encrypted = CryptoJS.AES.encrypt(
-      seeds,
-      password
-    ).toString();
-
-    if (this.encrypted) {
-      window.localStorage.setItem("seeds", this.encrypted.toString());
-    } else {
-      window.localStorage.removeItem("seeds");
-    }
-   
     const tempWallet = await this.walletService.initWallet(seeds);
     this.wallet.next(tempWallet as Wallet);
     this.isAuthenticated.next(true);

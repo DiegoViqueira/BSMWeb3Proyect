@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
+import * as CryptoJS from "crypto-js";
+import * as Mnemonic from "bitcore-mnemonic";
 
 @Component({
   selector: 'app-login',
@@ -12,18 +14,16 @@ import { AuthServiceService } from 'src/app/services/auth-service.service';
 export class LoginPage implements OnInit {
 
   loginForm: any;
-  ethersForm: any;
-
-  wallet:any = {
-    address: ""
-  };
-
-
+  encrypted:string|null = '';
+  metamaskIconSvg = "/assets/icon/metamask-icon.svg";
+ 
   constructor(private activatedRoute: ActivatedRoute,public alertController: AlertController , private formBuilder: FormBuilder, private authService:AuthServiceService,private router: Router) {
     this.loginForm = this.formBuilder.group({
       seeds: "",
       password: ""
     });
+
+    this.encrypted = window.localStorage.getItem("seeds");
    }
 
   async ngOnInit() {
@@ -31,6 +31,7 @@ export class LoginPage implements OnInit {
 
 
   async sendLogin(loginData:any) {
+
     if (!loginData.password) {
       const alert = await this.alertController.create({
         message: "Introduce tu password",
@@ -41,9 +42,15 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    if (!loginData.seeds) {
+    if (this.encrypted) {
+      var decrypt = CryptoJS.AES.decrypt(this.encrypted, loginData.password);
+
+      loginData.seeds = decrypt.toString(CryptoJS.enc.Utf8);
+    }
+
+    if (!Mnemonic.isValid(loginData.seeds)) {
       const alert = await this.alertController.create({
-        message: "Introduce tus semillas",
+        message: "Las semillas no son validas",
         buttons: ['OK']
       });
   
@@ -52,7 +59,19 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    if ( await this.authService.login(loginData.seeds,loginData.password))
+    this.encrypted = CryptoJS.AES.encrypt(
+      loginData.seeds,
+      loginData.password
+    ).toString();
+
+    if (this.encrypted) {
+      window.localStorage.setItem("seeds", this.encrypted.toString());
+    } else {
+      window.localStorage.removeItem("seeds");
+    }
+
+
+    if ( await this.authService.login(loginData.seeds))
     {
       this.router.navigateByUrl('/add-document', { replaceUrl: true });
     }
