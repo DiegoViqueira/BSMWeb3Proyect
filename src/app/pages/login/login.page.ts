@@ -52,7 +52,10 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    this.authService.login(loginData.seeds,loginData.password);
+    if ( await this.authService.login(loginData.seeds,loginData.password))
+    {
+      this.router.navigateByUrl('/add-document', { replaceUrl: true });
+    }
 
   }
 

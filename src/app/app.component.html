@@ -1,13 +1,34 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+  <ion-split-pane contentId="main-content" >
+    <ion-menu contentId="main-content"  type="overlay"  >
+      <ion-header>
+        <ion-toolbar color="tertiary">
+          <ion-title > Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-card *ngIf="wallet != null" color="primary">
+        <ion-card-header>
+          <ion-card-title  *ngIf="wallet?.address != null">Wallet</ion-card-title>
+          <ion-card-subtitle  *ngIf="wallet?.address != null" >{{ wallet.address }}</ion-card-subtitle>
+          
+        </ion-card-header>
+      
+        <ion-card-content *ngIf="wallet?.balance != null" >
+          Your Balance :  {{ wallet.balance }} 
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="wallet == null" color="secondary">
+        <ion-card-header>
+          <ion-card-title  *ngIf="wallet == null">No Wallet Connected</ion-card-title>
+        </ion-card-header>
+      
+      </ion-card>
+
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header *ngIf="wallet" >Conneced Wallet</ion-list-header>
-          <ion-note size="small" >{{ wallet }} </ion-note>
-
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+       
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index" >
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected" >
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>

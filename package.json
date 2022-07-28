@@ -22,6 +22,7 @@
     "@ionic/angular": "^6.1.9",
     "bip39": "^3.0.4",
     "bitcore-mnemonic": "^8.25.31",
+    "crypto-js": "^4.1.1",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^7.1.5",
     "ethereumjs-wallet": "^1.0.2",
@@ -31,6 +32,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^14.0.0",
     "@angular-devkit/build-angular": "^14.0.0",
     "@angular-eslint/builder": "~13.0.1",
     "@angular-eslint/eslint-plugin": "~13.0.1",

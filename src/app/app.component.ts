@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { filter, map ,take} from 'rxjs/operators';
+import { Wallet } from './interfaces/wallet';
 import { AuthServiceService } from './services/auth-service.service';
 @Component({
   selector: 'app-root',
@@ -15,15 +16,18 @@ export class AppComponent implements OnInit {
     { title: 'Log Out', url: 'log-out', icon: 'exit' },
   ];
 
-  wallet:any;
+  wallet:Wallet;
   
   constructor( private authService:AuthServiceService) {}
   
   ngOnInit(): void {
-    this.authService.getWalletAdress().subscribe( adress =>    this.wallet = adress );
+    this.authService.getWalletAdress().subscribe( wallet =>  {
+        this.wallet = wallet;
+        console.log(this.wallet);
+      });
   }
   
   ngOnDestroy() {
-     this.authService.getWalletAdress();
+     
   }
 }

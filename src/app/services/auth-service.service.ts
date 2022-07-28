@@ -2,6 +2,13 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 
+import * as Mnemonic from "bitcore-mnemonic";
+import * as util from "ethereumjs-util";
+import * as CryptoJS from "crypto-js";
+import { AlertController } from '@ionic/angular';
+import { WalletService } from './wallet.service';
+import { Wallet } from '../interfaces/wallet';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,40 +16,59 @@ export class AuthServiceService {
 
   // Init with null to filter out the first value in a guard!
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
-  walletAdress: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  
-  wallet:any = {
-    address: ""
-  };
+  wallet: BehaviorSubject<Wallet> = new BehaviorSubject<Wallet>(null);
+ 
   encrypted:string|null = '';
   web3:any;
   window: any;
  
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(@Inject(DOCUMENT) private document: Document , public alertController: AlertController , private walletService :WalletService ) {
     this.window = this.document.defaultView;
   }
 
-  getWalletAdress():Observable<string>
+  getWalletAdress():Observable<Wallet>
   {
-     return this.walletAdress;
+     return this.wallet;
   }
 
-  login( seeds, password): Observable<any> {
+ async login( seeds, password): Promise<boolean> {
 
-    console.info("Seeds : " + seeds )
-    console.info("Password : " + password )
-    
+    if (!Mnemonic.isValid(seeds)) {
+      const alert = await this.alertController.create({
+        message: "Las semillas no son validas",
+        buttons: ['OK']
+      });
+  
+      await alert.present();
+
+      return false;
+    }
+
+    this.encrypted = CryptoJS.AES.encrypt(
+      seeds,
+      password
+    ).toString();
+
+    if (this.encrypted) {
+      window.localStorage.setItem("seeds", this.encrypted.toString());
+    } else {
+      window.localStorage.removeItem("seeds");
+    }
+   
+    const tempWallet = await this.walletService.initWallet(seeds);
+    this.wallet.next(tempWallet as Wallet);
+    console.log (tempWallet);
     this.isAuthenticated.next(true);
-    return;
+    return true;
   }
 
   loginWithMetamask():boolean {
     return this.window.ethereum.enable().then(async (accounts:any) => {
       var address = accounts[0]
-      this.wallet = {
+      const tempWallet = {
         address
       }
-      this.walletAdress.next(address);
+      this.wallet.next(tempWallet as Wallet);
       this.isAuthenticated.next(true);
       return true;
     });
@@ -51,7 +77,7 @@ export class AuthServiceService {
  
   logout(): Promise<void> {
     
-    this.walletAdress.next('');
+    this.wallet.next(null);
     this.isAuthenticated.next(false);
     return;
   }
