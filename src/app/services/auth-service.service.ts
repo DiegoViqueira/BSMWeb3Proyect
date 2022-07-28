@@ -2,9 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 
-import * as Mnemonic from "bitcore-mnemonic";
-import * as util from "ethereumjs-util";
-import * as CryptoJS from "crypto-js";
 import { AlertController } from '@ionic/angular';
 import { WalletService } from './wallet.service';
 import { Wallet } from '../interfaces/wallet';
@@ -17,7 +14,6 @@ export class AuthServiceService {
   // Init with null to filter out the first value in a guard!
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   wallet: BehaviorSubject<Wallet> = new BehaviorSubject<Wallet>(null);
- 
   window: any;
  
   constructor(@Inject(DOCUMENT) private document: Document , public alertController: AlertController , private walletService :WalletService ) {
@@ -49,7 +45,6 @@ export class AuthServiceService {
   }
  
   logout(): Promise<void> {
-    
     this.wallet.next(null);
     this.isAuthenticated.next(false);
     return;
