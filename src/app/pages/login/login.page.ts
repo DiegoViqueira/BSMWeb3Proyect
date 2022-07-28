@@ -86,4 +86,11 @@ export class LoginPage implements OnInit {
      }
   }
 
+
+  removeSeeds() {
+    window.localStorage.removeItem("seeds");
+    this.encrypted = null;
+
+  }
+
 }

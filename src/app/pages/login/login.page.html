@@ -19,6 +19,7 @@
           <ion-input formControlName="password" type="password" placeholder="Password"></ion-input>
         </ion-item>
         <ion-button expand="block" type="submit" class="ion-margin-top">Login</ion-button>
+        <ion-button expand="block" *ngIf="encrypted" color="danger" type="button" (click)="removeSeeds()">Remove Remember Me</ion-button>
         <ion-button expand="block" fill="outline" *ngIf="!encrypted" type="button" (click)="loginWithMetamask()"><ion-icon [src]="metamaskIconSvg" class="margin-left"></ion-icon>  Login with Metamask</ion-button>
       </form>
     </ion-card-content>

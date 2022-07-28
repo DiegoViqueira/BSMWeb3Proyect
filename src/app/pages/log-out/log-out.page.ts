@@ -13,8 +13,6 @@ export class LogOutPage implements OnInit {
 
   ngOnInit() {
 
-    window.localStorage.removeItem("seeds");
-
     this.authService.logout();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
