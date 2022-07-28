@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
 import { AddDocumentPageRoutingModule } from './add-document-routing.module';
-
 import { AddDocumentPage } from './add-document.page';
 
 @NgModule({
@@ -13,7 +10,8 @@ import { AddDocumentPage } from './add-document.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AddDocumentPageRoutingModule
+    AddDocumentPageRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [AddDocumentPage]
 })

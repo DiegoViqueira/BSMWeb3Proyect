@@ -89,6 +89,7 @@ export class LoginPage implements OnInit {
 
   removeSeeds() {
     window.localStorage.removeItem("seeds");
+    this.loginForm.reset();
     this.encrypted = null;
 
   }

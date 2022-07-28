@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
 import { AddEstablishmentPageRoutingModule } from './add-establishment-routing.module';
-
 import { AddEstablishmentPage } from './add-establishment.page';
 
 @NgModule({
@@ -13,7 +10,8 @@ import { AddEstablishmentPage } from './add-establishment.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AddEstablishmentPageRoutingModule
+    AddEstablishmentPageRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [AddEstablishmentPage]
 })

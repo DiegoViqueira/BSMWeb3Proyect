@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,7 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AddDocumentPage implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  addDocuementForm:any;
+  constructor(private activatedRoute: ActivatedRoute ,  private formBuilder: FormBuilder) {
+
+    this.addDocuementForm = this.formBuilder.group({
+      documentId: ['', Validators.required],
+      file: ['', Validators.required]
+    });
+   }
 
   ngOnInit() {
   }
