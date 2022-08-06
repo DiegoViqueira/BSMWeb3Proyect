@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  contractAddress: '0xf933c3A7daBdF35577D232e1a27a1BE78680DBFE',
+  provider : 'HTTP://127.0.0.1:7545'
 };
 
 /*

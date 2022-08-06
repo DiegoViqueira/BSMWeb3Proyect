@@ -8,6 +8,15 @@
       </ion-header>
       <ion-card *ngIf="wallet != null" color="primary">
         <ion-card-header>
+         
+
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img src="assets/user.svg">
+            </ion-thumbnail>
+            <ion-label  *ngIf="establishment != null">{{ establishment }}</ion-label>
+          </ion-item>
+     
           <ion-card-title  *ngIf="wallet?.address != null">Wallet</ion-card-title>
           <ion-card-subtitle  *ngIf="wallet?.address != null" >{{ wallet.address }}</ion-card-subtitle>
           

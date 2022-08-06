@@ -15,17 +15,18 @@ const routes: Routes = [
   {
     path: 'add-establishment',
     loadChildren: () => import('./pages/add-establishment/add-establishment.module').then( m => m.AddEstablishmentPageModule),
-    canLoad: [AuthGuardGuard]
+    canActivate: [AuthGuardGuard]
   },
   {
     path: 'add-document',
     loadChildren: () => import('./pages/add-document/add-document.module').then( m => m.AddDocumentPageModule),
-    canLoad: [AuthGuardGuard]
+    canActivate: [AuthGuardGuard]
+  
   },
   {
     path: 'audit-record',
     loadChildren: () => import('./pages/audit-record/audit-record.module').then( m => m.AuditRecordPageModule),
-    canLoad: [AuthGuardGuard]
+    canActivate: [AuthGuardGuard]
   },
   {
     path: 'log-out',

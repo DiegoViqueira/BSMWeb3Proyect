@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
     "@ionic/angular": "^6.1.9",
+    "@openzeppelin/contracts": "^4.7.2",
     "bip39": "^3.0.4",
     "bitcore-mnemonic": "^8.25.31",
     "crypto-js": "^4.1.1",
