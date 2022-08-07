@@ -50,12 +50,25 @@ export class AuditService {
 
    }
 
+  async getContractAddressFromEstablishmentID(establishmentID:string)
+  {
+
+      await this.initWeb3();
+      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+      return await this.contract.methods.getContractAddressFromEstablishmentId(establishmentID).call().catch(error => {
+        this.toastService.presentToast(error,'danger');
+      });;
+
+   }
+
 
    // timestamp: Number - the unix timestamp for when the block was collated.
-   geteventDetails(data_events:any[]):any[] {
-    return  data_events.map((event) =>{ 
+   geteventDetails(data_events:any[] , dateFrom:Date):any[] {
+    let allEvents =   data_events.map((event) =>{ 
       return { timestamp: new Date(event.returnValues.timestamp*1000) , documentId:  event.returnValues.documentId , documentHash: event.returnValues.documentHash  } 
     });
+
+    return allEvents.filter( (item ) => item.timestamp >= dateFrom);
     
   }
 
@@ -66,7 +79,7 @@ export class AuditService {
        await this.initWeb3();
        let contract = await new this.web3.eth.Contract(EstablishmentAuditABI.abi, address);
        const events = await contract.getPastEvents( 'RecordAudited', { fromBlock: 0, toBlock: 'latest' });
-       return  this.geteventDetails(events);
+       return  this.geteventDetails(events, dateFrom);
     }
 
    async addEstablishment( establishmentID:string , address:string ):Promise<AuditResponse>
@@ -84,6 +97,8 @@ export class AuditService {
 
        await this.initWeb3();
        this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+
+      
 
        var rawData = {
         from: this.wallet.address,

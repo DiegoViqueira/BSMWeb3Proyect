@@ -3,6 +3,7 @@ import { IonModal, ModalController } from '@ionic/angular';
 import { AuditService } from 'src/app/services/audit.service';
 import { OverlayEventDetail } from '@ionic/core/components'; 
 import { ModalCompareComponent } from '../../components/modal-compare/modal-compare.component'
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-list-documents',
@@ -12,12 +13,27 @@ import { ModalCompareComponent } from '../../components/modal-compare/modal-comp
 export class ListDocumentsPage implements OnInit {
 
   establishmentRecords:any[];
-  constructor(private auditService: AuditService,private modalCtrl: ModalController) { }
+  listDocumentForm:any;
+  constructor(private formBuilder: FormBuilder,private auditService: AuditService,private modalCtrl: ModalController) { 
+    this.listDocumentForm = this.formBuilder.group({
+      establishmentId: ['', Validators.required],
+      date: ['', Validators.required],
+   
+    });
+  }
 
 
   async ngOnInit() {
-    //TODO ADD COMPONEN WITH FILTERS
-    this.establishmentRecords = await  this.auditService.getEvents("0x7234cDdbbC86FDA5F972C3157C18D92F34886dFf",new Date());
+   }
+
+  async getDocument(listDocumentForm:any)
+  {
+       //TODO ADD COMPONEN WITH FILTERS
+       console.info(listDocumentForm.establishmentId) 
+       let address = await this.auditService.getContractAddressFromEstablishmentID(listDocumentForm.establishmentId);
+       console.info(address) 
+       console.info(listDocumentForm.date)
+       this.establishmentRecords = await  this.auditService.getEvents(address,new Date(listDocumentForm.date));
   }
 
   async openModal(toCompareHash:string) {

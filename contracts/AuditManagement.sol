@@ -81,10 +81,17 @@ contract AuditManagement is Ownable{
    
 
    /**
-    * @dev Get establishment Id for a address
+    * @dev Get establishment Id from a address
     */
    function getStablishmentID(address owner ) public view returns (string memory) {
         return addressIDEstablishments[owner];
+   }
+
+    /**
+    * @dev Get subcontract Adress from establishmentID 
+    */
+   function getContractAddressFromEstablishmentId(string memory establishmentID ) public view returns (address) {
+        return addressEstablishments[establishmentID];
    }
 
    /**

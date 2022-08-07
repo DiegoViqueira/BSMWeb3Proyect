@@ -21,7 +21,7 @@ export class AddEstablishmentPage implements OnInit {
   }
 
 
-  async registert(addEstablishmentForm) {
+  async register(addEstablishmentForm) {
 
     await this.auditService.addEstablishment(addEstablishmentForm.establishmentId, addEstablishmentForm.establishmentWalletAddress).then((result) => {
       if (result.result === true) {
