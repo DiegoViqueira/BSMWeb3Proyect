@@ -10,15 +10,17 @@ import { ActivatedRoute } from '@angular/router';
 export class AuditRecordPage implements OnInit {
 
   auditRecordForm:any;
-  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) { 
+  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
     this.auditRecordForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
       documentId: ['', Validators.required],
       file: ['', Validators.required],
-      
+
     });
 
   }
+  register(auditRecordForm)
+  {}
 
   ngOnInit() {
   }

@@ -25,6 +25,14 @@ Ver apartado de docuementacion para mas informacion.
   truffle deploy --network development
 ```
 
+
+- Reeplazar el SC Adress en las variables de entorno
+```typescript
+  export const environment = {
+  contractAddress: '0x30966600F09685F2dE53EA49F909B0e5D3752227',
+  };
+```
+
 - Construir y ejecutar 
 ```bash
   ionic serve

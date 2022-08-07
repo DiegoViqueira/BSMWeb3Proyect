@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract EstablishmentAudit is Ownable{
 
+   event RecordAudited( uint256 timestamp , string documentId , bytes32 documentHash);
    
   /**
     * @dev Establishment Identifier, name or CIF or Whatever
@@ -28,8 +29,9 @@ contract EstablishmentAudit is Ownable{
     */
   function registerDocument(string memory documentId , bytes32 documentHash , address contractOwner) public returns(bool) {
     require(  owner() == contractOwner ,  "Only owner can register a Document");
-	  require(  AuditLogs[documentId] == 0 ,  "Document allready registered");
+	 require(  AuditLogs[documentId] == 0 ,  "Document allready registered");
     AuditLogs[documentId] = documentHash;
+    emit RecordAudited(block.timestamp, documentId ,documentHash );
     return true;
   }
 	
@@ -54,12 +56,21 @@ contract AuditManagement is Ownable{
    mapping(string=>address) private addressEstablishments;
    mapping(address=>string) private addressIDEstablishments;
 
+
+   /**
+    * @dev Helper function to compare
+    */
+   function compareStrings(string memory a, string memory b) public pure returns (bool) {
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
+    }
+
    /**
     * @dev Add an establishment to Audit
     */
 
    function AddEstablishment(string memory establishmentID ,address owner ) public onlyOwner returns (bool success) {
-		require(addressEstablishments[establishmentID] == address(0), "Establishment allready registered");
+		require(addressEstablishments[establishmentID] == address(0), "EstablishmentID has an adress already registered.");
+		require( compareStrings(addressIDEstablishments[owner],"") == true , "Adress has and Establishment ID allready registered.");
 		address newEstablishment = address(new EstablishmentAudit(establishmentID,msg.sender));            
 		establishmentAudit.push(newEstablishment);
       establishmentIds.push(establishmentID);
@@ -79,9 +90,9 @@ contract AuditManagement is Ownable{
    /**
     * @dev Add  an Audit Record 
     */
-  function registerAudit( string memory establishmentID , string memory documentId , string memory documentData ) public returns(bool) {
+  function registerAudit( string memory establishmentID , string memory documentId , bytes32  documentHash ) public returns(bool) {
 	 require(addressEstablishments[establishmentID] != address(0), "Could not register Audit Record because Establishment doesnt exist");
-    EstablishmentAudit(addressEstablishments[establishmentID]).registerDocument(documentId,keccak256(bytes(documentData)),msg.sender);
+    EstablishmentAudit(addressEstablishments[establishmentID]).registerDocument(documentId,documentHash,msg.sender);
     return true;
   }
 

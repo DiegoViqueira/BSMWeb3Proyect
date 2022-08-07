@@ -9,7 +9,7 @@ import { AuthServiceService } from './services/auth-service.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  
+
   public appPages = [
     { title: 'Add Establishment', url: 'add-establishment', icon: 'person-add' },
     { title: 'Audit Record', url: 'audit-record', icon: 'archive' },
@@ -20,20 +20,20 @@ export class AppComponent implements OnInit {
   disable_link=true;
   wallet:Wallet;
   establishment:string;
-  
+
   constructor( private authService:AuthServiceService, private auditService:AuditService) {}
-  
+
   ngOnInit() {
-    this.authService.getWalletAdress().subscribe( async wallet =>  {
+    this.authService.getWalletAddress().subscribe( async wallet =>  {
         this.wallet = wallet;
         if(this.wallet !== null)
            this.establishment =  await this.auditService.getEstablishmentID(this.wallet);
       });
 
-    
+
   }
-  
+
   ngOnDestroy() {
-     
+
   }
 }

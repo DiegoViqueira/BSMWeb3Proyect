@@ -5,10 +5,10 @@
     </ion-buttons>
     <ion-buttons slot="secondary">
       <ion-button [routerLink]="['/log-out']">
-        <ion-icon slot="icon-only" name="exit"  ></ion-icon>
+        <ion-icon slot="icon-only" name="exit"></ion-icon>
       </ion-button>
     </ion-buttons>
-    
+
   </ion-toolbar>
 </ion-header>
 
@@ -16,22 +16,25 @@
 
   <ion-card>
     <ion-card-header>
-          <ion-card-title>Add Establishment</ion-card-title>
+      <ion-card-title>Add Establishment</ion-card-title>
     </ion-card-header>
-  
+
     <ion-card-content>
-      <form [formGroup]="addEstablishmentForm" (ngSubmit)="registert(addEstablishmentForm.value)">
-          <ion-item>
+      <form [formGroup]="addEstablishmentForm" (ngSubmit)="register(addEstablishmentForm.value)">
+        <ion-item>
           <ion-label position="floating">Establishment Id</ion-label>
           <ion-input formControlName="establishmentId" type="input" placeholder="Establishment Id"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Establishment Wallet Adress</ion-label>
-          <ion-input formControlName="establishmentWalletAddress" type="input" placeholder="Establishment Wallet Address"></ion-input>
+          <ion-input formControlName="establishmentWalletAddress" type="input"
+                     placeholder="Establishment Wallet Address"></ion-input>
         </ion-item>
-        <ion-button expand="block" [disabled]="!addEstablishmentForm.valid" type="submit" class="ion-margin-top">Register</ion-button>
+        <ion-button expand="block" [disabled]="!addEstablishmentForm.valid" type="submit" class="ion-margin-top">
+          Register
+        </ion-button>
       </form>
     </ion-card-content>
   </ion-card>
-
+  <app-registered-block *ngIf="minedTransaction" [data]="minedTransaction"></app-registered-block>
 </ion-content>

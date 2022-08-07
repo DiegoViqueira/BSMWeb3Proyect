@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { AuditService } from 'src/app/services/audit.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {AuditService} from 'src/app/services/audit.service';
 
 @Component({
   selector: 'app-add-establishment',
@@ -11,28 +11,29 @@ import { AuditService } from 'src/app/services/audit.service';
 export class AddEstablishmentPage implements OnInit {
 
   addEstablishmentForm: any;
+  minedTransaction: any;
 
-  constructor(private activatedRoute: ActivatedRoute,  private formBuilder: FormBuilder , private auditService:AuditService) { 
+  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private auditService: AuditService) {
     this.addEstablishmentForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
-      establishmentWalletAddress:  ['', Validators.required]
+      establishmentWalletAddress: ['', Validators.required]
     });
-
-   
-
   }
 
 
-  registert(addEstablishmentForm)
-  {
+  async registert(addEstablishmentForm) {
 
-      this.auditService.addEstablishment(addEstablishmentForm.establishmentId, addEstablishmentForm.establishmentWalletAddress)
-    
+    await this.auditService.addEstablishment(addEstablishmentForm.establishmentId, addEstablishmentForm.establishmentWalletAddress).then((result) => {
+      if (result.result === true) {
+          this.minedTransaction = result.data;
+          this.addEstablishmentForm.reset();
+        }
+      }
+    );
   }
 
   ngOnInit() {
   }
-
 
 
 }
