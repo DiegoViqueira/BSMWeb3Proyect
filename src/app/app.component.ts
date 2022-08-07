@@ -12,9 +12,10 @@ export class AppComponent implements OnInit {
 
   public appPages = [
     { title: 'Add Establishment', url: 'add-establishment', icon: 'person-add' },
-    { title: 'Audit Record', url: 'audit-record', icon: 'archive' },
     { title: 'Add Document Record', url: 'add-document', icon: 'document-attach' },
-    { title: 'Log Out', url: 'log-out', icon: 'exit' },
+    { title: 'Audit Record', url: 'audit-record', icon: 'archive' },
+    { title: 'List Records', url:'list-documents', icon:'list'},
+    { title: 'Log Out', url: 'log-out', icon: 'exit' }
   ];
 
   disable_link=true;

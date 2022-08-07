@@ -31,6 +31,11 @@ const routes: Routes = [
   {
     path: 'log-out',
     loadChildren: () => import('./pages/log-out/log-out.module').then( m => m.LogOutPageModule)
+  },
+  {
+    path: 'list-documents',
+    loadChildren: () => import('./pages/list-documents/list-documents.module').then( m => m.ListDocumentsPageModule),
+    canActivate: [AuthGuardGuard]
   }
 ];
 

@@ -35,11 +35,9 @@ export class AddDocumentPage implements OnInit {
 
     const fileContent = await readFileContent(addDocuementForm.fileSource);
 
-    console.info(fileContent.toString());
-    console.info("0x" + this.cryproService.encodeKECCAK256(fileContent.toString()).toString("hex"))
+    //console.info("0x" + this.cryproService.encodeKECCAK256(fileContent.toString()).toString("hex"))
     await this.auditService.registerDocument("Prueba", addDocuementForm.documentId, this.cryproService.encodeKECCAK256(fileContent.toString())).then((result) => {
         if (result.result === true) {
-          console.info(result.data)
           this.minedTransaction = result.data;
           this.addDocuementForm.reset();
         }
