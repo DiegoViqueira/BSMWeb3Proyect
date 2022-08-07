@@ -35,5 +35,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+## Control de Cambios
+
+[CHANGELOG](https://github.com/DiegoViqueira/BSMWeb3Proyect/blob/main/CHANGELOG.md)
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
