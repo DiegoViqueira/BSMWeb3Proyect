@@ -14,17 +14,37 @@
     <ion-input  type="file" (change)="fileChanged($event)" placeholder="Your name"></ion-input>
   </ion-item>
 
+  <ion-card  color="dark">
+    <ion-card-header>
+      <ion-card-subtitle>Documento Registrado en Blockchain</ion-card-subtitle>
+    </ion-card-header>
+    
+    <ion-list id="inbox-list" >
+      <ion-list-header lines="none">
+        <ion-label color="primary" >Fecha: {{ timestamp  }}</ion-label>
+      </ion-list-header>
+      <ion-list-header lines="none">
+        <ion-label color="primary">Identificador: {{ documentId }}</ion-label>
+      </ion-list-header>
+      <ion-item lines="inset">
+        <ion-label color="primary">
+          <ion-text>Hash : {{ toCompareHash }}</ion-text>
+        </ion-label>
+        </ion-item>
+      
+    </ion-list>
+
+  </ion-card>
 
   <ion-card *ngIf="fileHash" color="dark">
     <ion-card-header>
-      <ion-card-subtitle>Concidendia</ion-card-subtitle>
+      <ion-card-subtitle>Archivo Seleccionado</ion-card-subtitle>
     </ion-card-header>
+ 
     <ion-item>
-      <ion-label>Hash BlockChain: {{ toCompareHash }}</ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Hash Archivo: {{ fileHash  }}</ion-label>
+      <ion-label color="primary">
+        <ion-text>Hash Archivo: {{ fileHash  }}</ion-text>
+      </ion-label>
     </ion-item>
 
     <ion-item>

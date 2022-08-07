@@ -28,18 +28,17 @@ export class ListDocumentsPage implements OnInit {
 
   async getDocument(listDocumentForm:any)
   {
-       //TODO ADD COMPONEN WITH FILTERS
-       console.info(listDocumentForm.establishmentId) 
        let address = await this.auditService.getContractAddressFromEstablishmentID(listDocumentForm.establishmentId);
-       console.info(address) 
-       console.info(listDocumentForm.date)
        this.establishmentRecords = await  this.auditService.getEvents(address,new Date(listDocumentForm.date));
   }
 
-  async openModal(toCompareHash:string) {
+  async openModal(toCompareHash:string, timestamp:Date , documentId:string ) {
     const modal = await this.modalCtrl.create({
       component: ModalCompareComponent,
-      componentProps: { toCompareHash : toCompareHash }
+      componentProps: { toCompareHash : toCompareHash, 
+        timestamp:timestamp,
+        documentId:documentId
+      }
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();

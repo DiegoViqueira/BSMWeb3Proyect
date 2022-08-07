@@ -11,6 +11,9 @@ import {CryptograpyService} from 'src/app/services/cryptograpy.service';
 export class ModalCompareComponent implements OnInit {
 
   toCompareHash: string;
+  timestamp:Date;
+  documentId:string;
+
   fileHash: String;
 
   constructor(private modalCtrl: ModalController, private cryproService: CryptograpyService) {

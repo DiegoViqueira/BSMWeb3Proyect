@@ -50,7 +50,7 @@
           <ion-label color="primary">
             <ion-text>Hash del Contenido : {{ item.documentHash }}</ion-text>
           </ion-label>
-          <ion-button expand="block" (click)="openModal(item.documentHash)">Validate</ion-button>
+          <ion-button expand="block" (click)="openModal(item.documentHash, item.timestamp,item.documentId )">Validate</ion-button>
         </ion-item>
         
       </ion-list>
