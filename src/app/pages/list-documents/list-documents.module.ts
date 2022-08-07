@@ -7,14 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ListDocumentsPageRoutingModule } from './list-documents-routing.module';
 
 import { ListDocumentsPage } from './list-documents.page';
+import { ModalCompareComponent } from 'src/app/components/modal-compare/modal-compare.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListDocumentsPageRoutingModule
+    ListDocumentsPageRoutingModule,
   ],
-  declarations: [ListDocumentsPage]
+  declarations: [ListDocumentsPage,ModalCompareComponent]
 })
 export class ListDocumentsPageModule {}

@@ -22,17 +22,18 @@
     <ion-card-content>
       <ion-list id="inbox-list" *ngFor="let item of establishmentRecords">
         <ion-list-header lines="none">
-          <ion-label>Timestamp: {{ item.timestamp }}</ion-label>
+          <ion-label>Timestamp: {{ item.timestamp  }}</ion-label>
           <ion-button>Id del Documento: {{ item.documentId }}</ion-button>
         </ion-list-header>
         <ion-item lines="inset">
           <ion-label color="primary">
             <ion-text>Hash del Contenido : {{ item.documentHash }}</ion-text>
           </ion-label>
+          <ion-button expand="block" (click)="openModal(item.documentHash)">Validate</ion-button>
         </ion-item>
-        <IonItemDivider></IonItemDivider>
-      </ion-list>
         
+      </ion-list>
+   
     </ion-card-content>
   </ion-card>
 
