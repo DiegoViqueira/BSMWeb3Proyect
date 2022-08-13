@@ -29,7 +29,7 @@ contract EstablishmentAudit is Ownable{
     */
   function registerDocument(string memory documentId , bytes32 documentHash , address contractOwner) public returns(bool) {
     require(  owner() == contractOwner ,  "Only owner can register a Document");
-	 require(  AuditLogs[documentId] == 0 ,  "Document allready registered");
+	  require(  AuditLogs[documentId] == 0 ,  "Document allready registered");
     AuditLogs[documentId] = documentHash;
     emit RecordAudited(block.timestamp, documentId ,documentHash );
     return true;

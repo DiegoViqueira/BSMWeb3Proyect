@@ -38,6 +38,13 @@ Ver apartado de docuementacion para mas informacion.
   ionic serve
 ```
 
+## RUN TEST (Smarts Contracts - with Mocha)
+
+```bash
+  npm test
+```
+
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

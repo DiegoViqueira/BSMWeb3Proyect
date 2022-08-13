@@ -7,7 +7,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "test": "mocha",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -28,6 +28,8 @@
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^7.1.5",
     "ethereumjs-wallet": "^1.0.2",
+    "ganache-cli": "^6.12.2",
+    "mocha": "^10.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "web3": "^1.7.4",
