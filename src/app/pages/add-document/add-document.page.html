@@ -14,17 +14,17 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Add Document Record</ion-card-title>
+      <ion-card-title>Agregar Documento</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <form [formGroup]="addDocuementForm" (ngSubmit)="registerDocument(addDocuementForm.value)">
         <ion-item>
-          <ion-label position="floating">Document Id</ion-label>
+          <ion-label position="floating">Identificador del Documento</ion-label>
           <ion-input formControlName="documentId" type="input" placeholder="Document Id"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">File</ion-label>
+          <ion-label position="floating">Archivo</ion-label>
           <ion-input formControlName="file" type="file" (change)="fileChanged($event)" placeholder="File"></ion-input>
         </ion-item>
         <ion-button expand="block" [disabled]="!addDocuementForm.valid" type="submit" class="ion-margin-top">Register

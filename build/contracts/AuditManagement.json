@@ -17873,12 +17873,12 @@
         }
       },
       "links": {},
-      "address": "0xCb1AbBA8d64E3122F587cBB92F5a6a2a50eC4697",
-      "transactionHash": "0x7cbf7ad830219c4624ee2e0ad1d11c412a5389531a7b0c9f4ae0356c7f145fe8"
+      "address": "0x60a6cA2CFA1782BE8F568c0D3086CDbc1e142fF7",
+      "transactionHash": "0x275aa4420b41b0a9eae7eac29b5af91d0f753a758031cd98abbe9d08dedbb8a6"
     }
   },
   "schemaVersion": "3.4.8",
-  "updatedAt": "2022-08-07T18:30:26.069Z",
+  "updatedAt": "2022-08-13T09:43:49.769Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

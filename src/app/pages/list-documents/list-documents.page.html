@@ -21,13 +21,14 @@
     <ion-card-content>
       <form [formGroup]="listDocumentForm" (ngSubmit)="getDocument(listDocumentForm.value)">
         <ion-item>
-          <ion-label position="floating">Establishment Id</ion-label>
+          <ion-label position="floating">Identificador del Establecimiento</ion-label>
           <ion-input formControlName="establishmentId" type="input" placeholder="Establishment Id"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha</ion-label>
-          <ion-input formControlName="date" type="date"  placeholder="Fecha"></ion-input>
+          <ion-input formControlName="date" type="date" placeholder="Fecha"></ion-input>
         </ion-item>
+
         <ion-button expand="block" [disabled]="!listDocumentForm.valid" type="submit" class="ion-margin-top">Buscar</ion-button>
       </form>
 
@@ -43,9 +44,15 @@
     <ion-card-content>
       <ion-list id="inbox-list" *ngFor="let item of establishmentRecords">
         <ion-list-header lines="none">
-          <ion-label>Timestamp: {{ item.timestamp  }}</ion-label>
           <ion-button>Id del Documento: {{ item.documentId }}</ion-button>
+          <ion-label>Timestamp: {{ item.timestamp  }}</ion-label>
         </ion-list-header>
+        <ion-item lines="none" >
+          <ion-label color="primary">
+            <ion-text>Transaction Hash : {{ item.transactionHash }}</ion-text>
+          </ion-label>
+          <ion-button expand="block">GasUsed: {{ item.gasUsed  }}</ion-button>
+        </ion-item>
         <ion-item lines="inset">
           <ion-label color="primary">
             <ion-text>Hash del Contenido : {{ item.documentHash }}</ion-text>

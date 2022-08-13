@@ -24,6 +24,10 @@ export class ListDocumentsPage implements OnInit {
 
 
   async ngOnInit() {
+
+    const currentDate = new Date().toISOString().substring(0, 10);
+    this.listDocumentForm.get('date').patchValue(currentDate)
+  
    }
 
   async getDocument(listDocumentForm:any)

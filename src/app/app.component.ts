@@ -11,11 +11,11 @@ import { AuthServiceService } from './services/auth-service.service';
 export class AppComponent implements OnInit {
 
   public appPages = [
-    { title: 'Add Establishment', url: 'add-establishment', icon: 'person-add' },
-    { title: 'Add Document Record', url: 'add-document', icon: 'document-attach' },
-    { title: 'Audit Record', url: 'audit-record', icon: 'archive' },
-    { title: 'List Records', url:'list-documents', icon:'list'},
-    { title: 'Log Out', url: 'log-out', icon: 'exit' }
+    { title: 'Agregar Establecimiento', url: 'add-establishment', icon: 'person-add' },
+    { title: 'Agregar Documento', url: 'add-document', icon: 'document-attach' },
+    { title: 'Auditar Documento', url: 'audit-record', icon: 'archive' },
+    { title: 'Listar Registros', url:'list-documents', icon:'list'},
+    { title: 'Salir', url: 'log-out', icon: 'exit' }
   ];
 
   disable_link=true;

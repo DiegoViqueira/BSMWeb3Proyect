@@ -16,22 +16,22 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Add Establishment</ion-card-title>
+      <ion-card-title>Agregar Establecimiento</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <form [formGroup]="addEstablishmentForm" (ngSubmit)="register(addEstablishmentForm.value)">
         <ion-item>
-          <ion-label position="floating">Establishment Id</ion-label>
+          <ion-label position="floating">Identificador del Establecimiento</ion-label>
           <ion-input formControlName="establishmentId" type="input" placeholder="Establishment Id"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">Establishment Wallet Adress</ion-label>
+          <ion-label position="floating">Wallet Address del Establecimiento</ion-label>
           <ion-input formControlName="establishmentWalletAddress" type="input"
                      placeholder="Establishment Wallet Address"></ion-input>
         </ion-item>
         <ion-button expand="block" [disabled]="!addEstablishmentForm.valid" type="submit" class="ion-margin-top">
-          Register
+          Registrar
         </ion-button>
       </form>
     </ion-card-content>

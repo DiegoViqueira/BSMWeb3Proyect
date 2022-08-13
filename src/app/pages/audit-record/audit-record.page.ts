@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { readFileContent } from 'src/app/resources/resurces';
+import { AuditService } from 'src/app/services/audit.service';
+import { CryptograpyService } from 'src/app/services/cryptograpy.service';
 
 @Component({
   selector: 'app-audit-record',
@@ -10,7 +13,10 @@ import { ActivatedRoute } from '@angular/router';
 export class AuditRecordPage implements OnInit {
 
   auditRecordForm:any;
-  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
+  fileHash:string;
+  blochainHash:string;
+  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder ,private auditService: AuditService
+    ,private cryproService: CryptograpyService) {
     this.auditRecordForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
       documentId: ['', Validators.required],
@@ -19,8 +25,20 @@ export class AuditRecordPage implements OnInit {
     });
 
   }
-  register(auditRecordForm)
-  {}
+
+  async fileChanged(e) {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const fileContent = await readFileContent(file);
+      this.fileHash = "0x" + this.cryproService.encodeKECCAK256(fileContent.toString()).toString("hex");
+    }
+  }
+ 
+  async audit(auditRecordForm)
+  {
+    this.blochainHash = await this.auditService.auditDocument(auditRecordForm.establishmentId,auditRecordForm.documentId);
+
+  }
 
   ngOnInit() {
   }

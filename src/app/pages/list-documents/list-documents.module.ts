@@ -15,8 +15,8 @@ import { ModalCompareComponent } from 'src/app/components/modal-compare/modal-co
     FormsModule,
     IonicModule,
     ListDocumentsPageRoutingModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    ],
   declarations: [ListDocumentsPage,ModalCompareComponent]
 })
 export class ListDocumentsPageModule {}

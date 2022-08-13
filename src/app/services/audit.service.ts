@@ -65,11 +65,18 @@ export class AuditService {
    // timestamp: Number - the unix timestamp for when the block was collated.
    geteventDetails(data_events:any[] , dateFrom:Date):any[] {
     let allEvents =   data_events.map((event) =>{ 
-      return { timestamp: new Date(event.returnValues.timestamp*1000) , documentId:  event.returnValues.documentId , documentHash: event.returnValues.documentHash  } 
+     return { transactionHash:event.transactionHash ,  timestamp: new Date(event.returnValues.timestamp*1000) , documentId:  event.returnValues.documentId ,
+        documentHash: event.returnValues.documentHash , gasUsed :0  }
     });
 
-    return allEvents.filter( (item ) => item.timestamp >= dateFrom);
+    let filteredEvents =  allEvents.filter( (item ) => item.timestamp >= dateFrom);
     
+    filteredEvents.forEach( async (event) => {
+        var receipt = await this.web3.eth.getTransactionReceipt(event.transactionHash);
+        event.gasUsed =  receipt.gasUsed;
+     });
+
+     return filteredEvents;
   }
 
 
@@ -79,6 +86,7 @@ export class AuditService {
        await this.initWeb3();
        let contract = await new this.web3.eth.Contract(EstablishmentAuditABI.abi, address);
        const events = await contract.getPastEvents( 'RecordAudited', { fromBlock: 0, toBlock: 'latest' });
+       console.info(events)
        return  this.geteventDetails(events, dateFrom);
     }
 
@@ -124,6 +132,17 @@ export class AuditService {
 
     }
 
+
+    async auditDocument(establishmentID:string, documentID:string ):Promise<any>
+    {
+      
+      await this.initWeb3();
+      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+      return await this.contract.methods.auditDocument(establishmentID,documentID).call().catch(error => {
+          this.toastService.presentToast(error,'danger');
+        });;
+;
+    }
 
     async registerDocument( establishmentID:string, docuemtnID:string , docuemtnHash:Buffer ):Promise<AuditResponse>
     {
