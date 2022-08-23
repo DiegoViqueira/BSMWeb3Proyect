@@ -71,7 +71,7 @@ contract AuditManagement is Ownable{
    function AddEstablishment(string memory establishmentID ,address owner ) public onlyOwner returns (bool success) {
 		require(addressEstablishments[establishmentID] == address(0), "EstablishmentID has an adress already registered.");
 		require( compareStrings(addressIDEstablishments[owner],"") == true , "Adress has and Establishment ID allready registered.");
-		address newEstablishment = address(new EstablishmentAudit(establishmentID,msg.sender));            
+		address newEstablishment = address(new EstablishmentAudit(establishmentID,owner));            
 		establishmentAudit.push(newEstablishment);
       establishmentIds.push(establishmentID);
 		addressEstablishments[establishmentID] = newEstablishment;
