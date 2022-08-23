@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   disable_link=true;
   wallet:Wallet;
   establishment:string;
-
+ 
   constructor( private authService:AuthServiceService, private auditService:AuditService) {}
 
   ngOnInit() {
@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
         this.wallet = wallet;
         if(this.wallet !== null)
            this.establishment =  await this.auditService.getEstablishmentID(this.wallet);
+
       });
 
 

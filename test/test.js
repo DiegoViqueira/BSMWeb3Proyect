@@ -67,7 +67,7 @@ describe('Audit Management tests', () => {
         const docuemtnHash = util.keccakFromString("KKKKKKKKKKKKKKKKK")
         
         await auditContract.methods.registerAudit(establishment,documentID,docuemtnHash).send({
-            from: this.owner , gas: 7000000}).on('transactionHash', function(transactionHash){ })
+            from: this.clientAccount , gas: 7000000}).on('transactionHash', function(transactionHash){ })
             .then(function(receipt){ });
 
         const registeredHash =  await auditContract.methods.auditDocument(establishment,documentID).call();
@@ -86,7 +86,7 @@ describe('Audit Management tests', () => {
             const docuemtnHash = util.keccakFromString("KKKKKKKKKKKKKKKKK")
             
             await auditContract.methods.registerAudit(establishment,documentID,docuemtnHash).send({
-                from: this.owner , gas: 7000000}).on('transactionHash', function(transactionHash){ })
+                from: this.clientAccount , gas: 7000000}).on('transactionHash', function(transactionHash){ })
                 .then(function(receipt){ });
     
             assert.fail(new TypeError('Cant register Document Twice'));
@@ -105,7 +105,7 @@ describe('Audit Management tests', () => {
             const docuemtnHash = util.keccakFromString("KKKKKKKKKKKKKKKKK")
             
             await auditContract.methods.registerAudit(establishment,documentID,docuemtnHash).send({
-                from: this.clientAccount , gas: 7000000}).on('transactionHash', function(transactionHash){ })
+                from: this.owner , gas: 7000000}).on('transactionHash', function(transactionHash){ })
                 .then(function(receipt){ });
 
          

@@ -14,6 +14,7 @@ export class AuthServiceService {
 
   // Init with null to filter out the first value in a guard!
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  role:BehaviorSubject<string> = new BehaviorSubject<string>(null);;
   wallet: BehaviorSubject<Wallet> = new BehaviorSubject<Wallet>(null);
   window: any;
 
@@ -34,6 +35,16 @@ export class AuthServiceService {
     return true;
   }
 
+  setRole(role:string)
+  {
+    this.role.next(role);
+  }
+  
+  getRole(): Observable<string>
+  {
+    return this.role;
+  }
+  
   loginWithMetamask(): boolean {
     return this.window.ethereum.enable().then(async (accounts: any) => {
       let address = accounts[0]

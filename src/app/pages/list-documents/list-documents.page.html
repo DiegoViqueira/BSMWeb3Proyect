@@ -21,8 +21,12 @@
     <ion-card-content>
       <form [formGroup]="listDocumentForm" (ngSubmit)="getDocument(listDocumentForm.value)">
         <ion-item>
-          <ion-label position="floating">Identificador del Establecimiento</ion-label>
-          <ion-input formControlName="establishmentId" type="input" placeholder="Establishment Id"></ion-input>
+
+          <ion-select formControlName="establishmentId" placeholder="Seleccione un Establecimiento">
+            <ng-container *ngFor="let item of establishments ">
+              <ion-select-option  value="{{item}}">{{item}}</ion-select-option>
+          </ng-container>
+          </ion-select>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha</ion-label>

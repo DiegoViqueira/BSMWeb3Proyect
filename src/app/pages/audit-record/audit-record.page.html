@@ -21,9 +21,13 @@
     <ion-card-content>
       <form [formGroup]="auditRecordForm" (ngSubmit)="audit(auditRecordForm.value)">
         <ion-item>
-          <ion-label position="floating">Identificador del Establecimiento</ion-label>
-          <ion-input formControlName="establishmentId" type="input" placeholder="Establishment Id"></ion-input>
-        </ion-item>
+        <ion-select formControlName="establishmentId" placeholder="Seleccione un Establecimiento">
+          <ng-container *ngFor="let item of establishments ">
+            <ion-select-option  value="{{item}}">{{item}}</ion-select-option>
+        </ng-container>
+        </ion-select>
+      </ion-item>
+        
         <ion-item>
           <ion-label position="floating">Identificador del Documento</ion-label>
           <ion-input formControlName="documentId" type="input" placeholder="Document Id"></ion-input>

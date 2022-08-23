@@ -133,6 +133,16 @@ export class AuditService {
     }
 
 
+    async ListEstablishments()
+    {
+
+      await this.initWeb3();
+      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+      return await this.contract.methods.listEstablishments().call().catch(error => {
+          this.toastService.presentToast(error,'danger');
+        });;
+    }
+
     async auditDocument(establishmentID:string, documentID:string ):Promise<any>
     {
       

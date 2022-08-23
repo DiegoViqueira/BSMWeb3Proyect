@@ -14,6 +14,7 @@ export class ListDocumentsPage implements OnInit {
 
   establishmentRecords:any[];
   listDocumentForm:any;
+  establishments:Array<string>;
   constructor(private formBuilder: FormBuilder,private auditService: AuditService,private modalCtrl: ModalController) { 
     this.listDocumentForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
@@ -27,6 +28,7 @@ export class ListDocumentsPage implements OnInit {
 
     const currentDate = new Date().toISOString().substring(0, 10);
     this.listDocumentForm.get('date').patchValue(currentDate)
+    this.establishments = await this.auditService.ListEstablishments();
   
    }
 

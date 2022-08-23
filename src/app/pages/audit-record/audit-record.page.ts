@@ -15,6 +15,7 @@ export class AuditRecordPage implements OnInit {
   auditRecordForm:any;
   fileHash:string;
   blochainHash:string;
+  establishments:Array<string>;
   constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder ,private auditService: AuditService
     ,private cryproService: CryptograpyService) {
     this.auditRecordForm = this.formBuilder.group({
@@ -40,7 +41,9 @@ export class AuditRecordPage implements OnInit {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+
+    this.establishments = await this.auditService.ListEstablishments();
   }
 
 }

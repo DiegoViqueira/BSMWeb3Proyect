@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  contractAddress: '0x2172CAf17b08Dfc5633f838Bb3788C271E6c11C2',
+  contractAddress: '0xE42AF78737298DBa40D3d5ffc76714c173728b0E',
   provider : 'HTTP://127.0.0.1:7545'
 };
 
