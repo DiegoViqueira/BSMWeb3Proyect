@@ -36,6 +36,7 @@ export class WalletService implements OnDestroy {
 
   async initWeb3Metamask() {
     this.web3 = new Web3(this.window.ethereum);
+    return this.web3;
   }
 
   async initWalletMetamask(address: string) {

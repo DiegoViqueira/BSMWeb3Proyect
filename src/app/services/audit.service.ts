@@ -21,6 +21,7 @@ export class AuditService {
   contract: any;
   web3:Web3;
   wallet:Wallet;
+
   constructor( private authService:AuthServiceService , private toastService: ToastService , private  walletService:WalletService) {
 
     this.authService.getWalletAddress().subscribe(wallet =>  {
@@ -132,6 +133,31 @@ export class AuditService {
 
     }
 
+    async sendTransactionWithMetamask(dataToSend)
+    {
+      let transactionConfig = {
+        to: environment.contractAddress, // Required except during contract publications.
+        from: this.wallet.address, // must match user's active address.
+        data:dataToSend
+      };
+
+   
+      var web3 = await this.walletService.initWeb3Metamask();
+    
+      return await web3.eth.sendTransaction(transactionConfig).then((receipt) => {
+        return  {result:true, data:receipt} as AuditResponse;
+       }).catch((error) => {console.info(error) ; return  {result:false, data:''} as AuditResponse;});
+    } 
+
+    async GetProfile(userAddress)
+    {
+
+      await this.initWeb3();
+      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+      return await this.contract.methods.getUserProfile().call({from: userAddress}).catch(error => {
+          this.toastService.presentToast(error,'danger');
+        });;
+    }
 
     async ListEstablishments()
     {
@@ -162,6 +188,15 @@ export class AuditService {
             return  {result:false, data:null} as AuditResponse;
         }
 
+        console.log(docuemtnHash.toString())
+
+        if( this.wallet.privateKey == null ||  this.wallet.privateKey == undefined  )
+        {
+           var result = await this.sendTransactionWithMetamask(this.contract.methods.registerAudit(establishmentID,docuemtnID,docuemtnHash).encodeABI());
+           
+        }
+          
+        
         await this.initWeb3();
         this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
 

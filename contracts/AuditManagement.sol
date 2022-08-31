@@ -51,6 +51,7 @@ contract EstablishmentAudit is Ownable{
 contract AuditManagement is Ownable{
 
    
+   
    address[] private establishmentAudit;
    string[]  private establishmentIds; 
    mapping(string=>address) private addressEstablishments;
@@ -119,12 +120,30 @@ contract AuditManagement is Ownable{
       return establishmentAudit;
    }
 
-  /**
+    /**
+    * @dev get user profile
+    */
+   function getUserProfile() public view returns (string memory) {
+       
+      if(msg.sender == owner())
+        return 'administrator';
+
+      if( !compareStrings(addressIDEstablishments[msg.sender] , "" ))
+        return 'user';
+      
+      return 'viewer';
+   }
+
+    /**
     * @dev List all Establishments
     */
-   function listEstablishments() public view returns (string[] memory) {
+    
+   function  listEstablishments() public view returns (string[] memory) {
+       
         return establishmentIds;
    }
+
+
 }
 
 

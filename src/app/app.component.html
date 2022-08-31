@@ -16,6 +16,8 @@
           </ion-item>
           <ion-card-title *ngIf="wallet?.address != null">Wallet</ion-card-title>
           <ion-card-subtitle *ngIf="wallet?.address != null">{{ wallet.address }}</ion-card-subtitle>
+          <ion-card-title *ngIf="role != null">Role</ion-card-title>
+          <ion-card-subtitle *ngIf="role != null">{{ role }}</ion-card-subtitle>
         </ion-card-header>
 
         <ion-card-content *ngIf="wallet?.balance != null">

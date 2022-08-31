@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AdminGuard } from './guards/admin.guard';
 import { AuthGuardGuard } from './guards/auth-guard.guard';
+import { UserGuard } from './guards/user.guard';
 
 const routes: Routes = [
   {
@@ -15,12 +17,12 @@ const routes: Routes = [
   {
     path: 'add-establishment',
     loadChildren: () => import('./pages/add-establishment/add-establishment.module').then( m => m.AddEstablishmentPageModule),
-    canActivate: [AuthGuardGuard]
+    canActivate: [AuthGuardGuard,AdminGuard]
   },
   {
     path: 'add-document',
     loadChildren: () => import('./pages/add-document/add-document.module').then( m => m.AddDocumentPageModule),
-    canActivate: [AuthGuardGuard]
+    canActivate: [AuthGuardGuard,UserGuard]
   
   },
   {

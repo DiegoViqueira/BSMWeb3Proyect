@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   disable_link=true;
   wallet:Wallet;
   establishment:string;
+  role:string;
  
   constructor( private authService:AuthServiceService, private auditService:AuditService) {}
 
@@ -29,6 +30,9 @@ export class AppComponent implements OnInit {
         this.wallet = wallet;
         if(this.wallet !== null)
            this.establishment =  await this.auditService.getEstablishmentID(this.wallet);
+        
+        this.role = await this.auditService.GetProfile(this.wallet.address);
+        this.authService.setRole(this.role)
 
       });
 
