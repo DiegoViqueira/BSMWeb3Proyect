@@ -146,7 +146,9 @@ export class AuditService {
     
       return await web3.eth.sendTransaction(transactionConfig).then((receipt) => {
         return  {result:true, data:receipt} as AuditResponse;
-       }).catch((error) => {console.info(error) ; return  {result:false, data:''} as AuditResponse;});
+       }).catch((err) => { 
+        const ErrorArray = err.message.split("Tx Signature:");
+        this.toastService.presentToast(ErrorArray[1],'danger'); ; return  {result:false, data:''} as AuditResponse;});
     } 
 
     async GetProfile(userAddress)
@@ -192,7 +194,7 @@ export class AuditService {
 
         if( this.wallet.privateKey == null ||  this.wallet.privateKey == undefined  )
         {
-           var result = await this.sendTransactionWithMetamask(this.contract.methods.registerAudit(establishmentID,docuemtnID,docuemtnHash).encodeABI());
+           return await this.sendTransactionWithMetamask(this.contract.methods.registerAudit(establishmentID,docuemtnID,docuemtnHash).encodeABI());
            
         }
           

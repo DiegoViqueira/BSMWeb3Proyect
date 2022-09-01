@@ -29,10 +29,10 @@ export class AppComponent implements OnInit {
     this.authService.getWalletAddress().subscribe( async wallet =>  {
         this.wallet = wallet;
         if(this.wallet !== null)
-           this.establishment =  await this.auditService.getEstablishmentID(this.wallet);
-        
-        this.role = await this.auditService.GetProfile(this.wallet.address);
-        this.authService.setRole(this.role)
+        {   this.establishment =  await this.auditService.getEstablishmentID(this.wallet);
+            this.role = await this.auditService.GetProfile(this.wallet.address);
+            this.authService.setRole(this.role)
+        }    
 
       });
 
