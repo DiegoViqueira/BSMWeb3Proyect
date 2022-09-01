@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'src/app/interfaces/wallet';
-import {readFileContent} from 'src/app/resources/resurces';
-import {AuditService} from 'src/app/services/audit.service';
+import { readFileContent } from 'src/app/resources/resurces';
+import { AuditService } from 'src/app/services/audit.service';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
-import {CryptograpyService} from 'src/app/services/cryptograpy.service';
+import { CryptograpyService } from 'src/app/services/cryptograpy.service';
 
 
 @Component({
@@ -17,11 +17,11 @@ export class AddDocumentPage implements OnInit {
 
   addDocuementForm: any;
   minedTransaction: any;
-  establishmentId:string;
-  wallet:Wallet;
+  establishmentId: string;
+  wallet: Wallet;
 
   constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder
-    , private auditService: AuditService, private cryproService: CryptograpyService, private authService:AuthServiceService) {
+    , private auditService: AuditService, private cryproService: CryptograpyService, private authService: AuthServiceService) {
 
     this.addDocuementForm = this.formBuilder.group({
       documentId: ['', Validators.required],
@@ -33,10 +33,10 @@ export class AddDocumentPage implements OnInit {
 
   ngOnInit() {
 
-    this.authService.getWalletAddress().subscribe( async wallet =>  {
+    this.authService.getWalletAddress().subscribe(async wallet => {
       this.wallet = wallet;
-      if(this.wallet !== null)
-         this.establishmentId =  await this.auditService.getEstablishmentID(this.wallet);
+      if (this.wallet !== null)
+        this.establishmentId = await this.auditService.getEstablishmentID(this.wallet);
     });
   }
 
@@ -44,15 +44,12 @@ export class AddDocumentPage implements OnInit {
   async registerDocument(addDocuementForm) {
 
     const fileContent = await readFileContent(addDocuementForm.fileSource);
-
-    //console.info("0x" + this.cryproService.encodeKECCAK256(fileContent.toString()).toString("hex"))
     await this.auditService.registerDocument(this.establishmentId, addDocuementForm.documentId, this.cryproService.encodeKECCAK256(fileContent.toString())).then((result) => {
-        if (result.result === true) {
-          console.info(result.data)
-          this.minedTransaction = result.data;
-          this.addDocuementForm.reset();
-        }
+      if (result.result === true) {
+        this.minedTransaction = result.data;
+        this.addDocuementForm.reset();
       }
+    }
     );
 
   }

@@ -1,15 +1,15 @@
-import {Inject, Injectable, OnDestroy} from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import * as Mnemonic from "bitcore-mnemonic";
 import * as util from "ethereumjs-util";
-import {hdkey} from "ethereumjs-wallet";
+import { hdkey } from "ethereumjs-wallet";
 import * as bip39 from "bip39";
 import Web3 from 'web3';
-import {ToastController} from '@ionic/angular';
-import {Wallet} from '../interfaces/wallet';
-import {DOCUMENT} from '@angular/common';
-import {environment} from 'src/environments/environment';
-import {Transaction} from 'ethereumjs-tx';
-import {ToastService} from './toast.service';
+import { ToastController } from '@ionic/angular';
+import { Wallet } from '../interfaces/wallet';
+import { DOCUMENT } from '@angular/common';
+import { environment } from 'src/environments/environment';
+import { Transaction } from 'ethereumjs-tx';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ import {ToastService} from './toast.service';
 export class WalletService implements OnDestroy {
 
   constructor(public toastController: ToastController, @Inject(DOCUMENT) private document: Document,
-              private toastService: ToastService) {
+    private toastService: ToastService) {
     this.window = this.document.defaultView;
   }
 

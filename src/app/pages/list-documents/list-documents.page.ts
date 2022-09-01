@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, ModalController } from '@ionic/angular';
 import { AuditService } from 'src/app/services/audit.service';
-import { OverlayEventDetail } from '@ionic/core/components'; 
+import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalCompareComponent } from '../../components/modal-compare/modal-compare.component'
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -12,14 +12,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class ListDocumentsPage implements OnInit {
 
-  establishmentRecords:any[];
-  listDocumentForm:any;
-  establishments:Array<string>;
-  constructor(private formBuilder: FormBuilder,private auditService: AuditService,private modalCtrl: ModalController) { 
+  establishmentRecords: any[];
+  listDocumentForm: any;
+  establishments: Array<string>;
+  constructor(private formBuilder: FormBuilder, private auditService: AuditService, private modalCtrl: ModalController) {
     this.listDocumentForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
       date: ['', Validators.required],
-   
+
     });
   }
 
@@ -29,28 +29,28 @@ export class ListDocumentsPage implements OnInit {
     const currentDate = new Date().toISOString().substring(0, 10);
     this.listDocumentForm.get('date').patchValue(currentDate)
     this.establishments = await this.auditService.ListEstablishments();
-  
-   }
 
-  async getDocument(listDocumentForm:any)
-  {
-       let address = await this.auditService.getContractAddressFromEstablishmentID(listDocumentForm.establishmentId);
-       this.establishmentRecords = await  this.auditService.getEvents(address,new Date(listDocumentForm.date));
   }
 
-  async openModal(toCompareHash:string, timestamp:Date , documentId:string ) {
+  async getDocument(listDocumentForm: any) {
+    let address = await this.auditService.getContractAddressFromEstablishmentID(listDocumentForm.establishmentId);
+    this.establishmentRecords = await this.auditService.getEvents(address, new Date(listDocumentForm.date));
+  }
+
+  async openModal(toCompareHash: string, timestamp: Date, documentId: string) {
     const modal = await this.modalCtrl.create({
       component: ModalCompareComponent,
-      componentProps: { toCompareHash : toCompareHash, 
-        timestamp:timestamp,
-        documentId:documentId
+      componentProps: {
+        toCompareHash: toCompareHash,
+        timestamp: timestamp,
+        documentId: documentId
       }
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-     
+
     }
   }
 

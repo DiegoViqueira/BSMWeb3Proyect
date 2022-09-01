@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as util from "ethereumjs-util";
 
 @Injectable({

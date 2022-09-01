@@ -4,8 +4,8 @@ import Web3 from 'web3';
 import * as util from "ethereumjs-util";
 import { Wallet } from '../interfaces/wallet';
 import { WalletService } from './wallet.service';
-const AuditABI = require ('../../../build/contracts/AuditManagement.json');
-const EstablishmentAuditABI = require ('../../../build/contracts/EstablishmentAudit.json');
+const AuditABI = require('../../../build/contracts/AuditManagement.json');
+const EstablishmentAuditABI = require('../../../build/contracts/EstablishmentAudit.json');
 import { Transaction } from "ethereumjs-tx";
 import { AuthServiceService } from './auth-service.service';
 import { env } from 'process';
@@ -19,12 +19,12 @@ import { AuditResponse } from '../interfaces/AuditResponse';
 export class AuditService {
 
   contract: any;
-  web3:Web3;
-  wallet:Wallet;
+  web3: Web3;
+  wallet: Wallet;
 
-  constructor( private authService:AuthServiceService , private toastService: ToastService , private  walletService:WalletService) {
+  constructor(private authService: AuthServiceService, private toastService: ToastService, private walletService: WalletService) {
 
-    this.authService.getWalletAddress().subscribe(wallet =>  {
+    this.authService.getWalletAddress().subscribe(wallet => {
       this.wallet = wallet;
 
     });
@@ -35,196 +35,185 @@ export class AuditService {
     this.web3 = new Web3;
 
     this.web3.setProvider(
-        new Web3.providers.HttpProvider(environment.provider)
+      new Web3.providers.HttpProvider(environment.provider)
     );
   }
 
 
-  async getEstablishmentID(wallet:Wallet)
-  {
+  async getEstablishmentID(wallet: Wallet) {
 
-      await this.initWeb3();
-      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-      return await this.contract.methods.getStablishmentID(wallet.address).call().catch(error => {
-        this.toastService.presentToast(error,'danger');
-      });;
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+    return await this.contract.methods.getStablishmentID(wallet.address).call().catch(error => {
+      this.toastService.presentToast(error, 'danger');
+    });;
 
-   }
+  }
 
-  async getContractAddressFromEstablishmentID(establishmentID:string)
-  {
+  async getContractAddressFromEstablishmentID(establishmentID: string) {
 
-      await this.initWeb3();
-      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-      return await this.contract.methods.getContractAddressFromEstablishmentId(establishmentID).call().catch(error => {
-        this.toastService.presentToast(error,'danger');
-      });;
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+    return await this.contract.methods.getContractAddressFromEstablishmentId(establishmentID).call().catch(error => {
+      this.toastService.presentToast(error, 'danger');
+    });;
 
-   }
-
-
-   // timestamp: Number - the unix timestamp for when the block was collated.
-   geteventDetails(data_events:any[] , dateFrom:Date):any[] {
-    let allEvents =   data_events.map((event) =>{ 
-     return { transactionHash:event.transactionHash ,  timestamp: new Date(event.returnValues.timestamp*1000) , documentId:  event.returnValues.documentId ,
-        documentHash: event.returnValues.documentHash , gasUsed :0  }
-    });
-
-    let filteredEvents =  allEvents.filter( (item ) => item.timestamp >= dateFrom);
-    
-    filteredEvents.forEach( async (event) => {
-        var receipt = await this.web3.eth.getTransactionReceipt(event.transactionHash);
-        event.gasUsed =  receipt.gasUsed;
-     });
-
-     return filteredEvents;
   }
 
 
-   async getEvents(address:any,dateFrom:Date)
-   {
- 
-       await this.initWeb3();
-       let contract = await new this.web3.eth.Contract(EstablishmentAuditABI.abi, address);
-       const events = await contract.getPastEvents( 'RecordAudited', { fromBlock: 0, toBlock: 'latest' });
-       console.info(events)
-       return  this.geteventDetails(events, dateFrom);
+  // timestamp: Number - the unix timestamp for when the block was collated.
+  geteventDetails(data_events: any[], dateFrom: Date): any[] {
+    let allEvents = data_events.map((event) => {
+      return {
+        transactionHash: event.transactionHash, timestamp: new Date(event.returnValues.timestamp * 1000), documentId: event.returnValues.documentId,
+        documentHash: event.returnValues.documentHash, gasUsed: 0
+      }
+    });
+
+    let filteredEvents = allEvents.filter((item) => item.timestamp >= dateFrom);
+
+    filteredEvents.forEach(async (event) => {
+      var receipt = await this.web3.eth.getTransactionReceipt(event.transactionHash);
+      event.gasUsed = receipt.gasUsed;
+    });
+
+    return filteredEvents;
+  }
+
+
+  async getEvents(address: any, dateFrom: Date) {
+
+    await this.initWeb3();
+    let contract = await new this.web3.eth.Contract(EstablishmentAuditABI.abi, address);
+    const events = await contract.getPastEvents('RecordAudited', { fromBlock: 0, toBlock: 'latest' });
+    console.info(events)
+    return this.geteventDetails(events, dateFrom);
+  }
+
+  async addEstablishment(establishmentID: string, address: string): Promise<AuditResponse> {
+    if (!util.isValidAddress(address)) {
+      this.toastService.presentToast("Address invalida. ", 'danger');
+      return { result: false, data: null } as AuditResponse;
     }
 
-   async addEstablishment( establishmentID:string , address:string ):Promise<AuditResponse>
-   {
-    if ( ! util.isValidAddress(address)) {
-      this.toastService.presentToast("Address invalida. ",'danger');
-      return  {result:false, data:null} as AuditResponse;
+    if (this.wallet.balance === "0") {
+      this.toastService.presentToast("No tiene Suficiente Balance", 'danger');
+      return { result: false, data: null } as AuditResponse;
     }
 
-       if( this.wallet.balance === "0" )
-       {
-           this.toastService.presentToast("No tiene Suficiente Balance",'danger');
-           return  {result:false, data:null} as AuditResponse;
-       }
-
-       await this.initWeb3();
-       this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-
-      
-
-       var rawData = {
-        from: this.wallet.address,
-        to: environment.contractAddress ,
-        value: 0,
-        gasPrice: this.web3.utils.toHex(10000000000),
-        gasLimit: this.web3.utils.toHex(1000000),
-        nonce: await this.web3.eth.getTransactionCount(this.wallet.address),
-        data: this.contract.methods.AddEstablishment(establishmentID,address).encodeABI()
-      };
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
 
 
-       return  this.web3.eth.sendSignedTransaction(this.walletService.signTransaction(new Transaction(rawData),this.wallet)).then((receipt:any) => {
-          this.toastService.presentToast("Establablasimiento agregado satisfactoriamente.",'success');
-          return  {result:true, data:receipt} as AuditResponse;
-        }, (err:any) => {
-           const ErrorArray = err.message.split("revert ");
-           this.toastService.presentToast(ErrorArray[1],'danger');
-           return  {result:false, data:null} as AuditResponse;
 
-        });
+    var rawData = {
+      from: this.wallet.address,
+      to: environment.contractAddress,
+      value: 0,
+      gasPrice: this.web3.utils.toHex(10000000000),
+      gasLimit: this.web3.utils.toHex(1000000),
+      nonce: await this.web3.eth.getTransactionCount(this.wallet.address),
+      data: this.contract.methods.AddEstablishment(establishmentID, address).encodeABI()
+    };
 
+
+    return this.web3.eth.sendSignedTransaction(this.walletService.signTransaction(new Transaction(rawData), this.wallet)).then((receipt: any) => {
+      this.toastService.presentToast("Establablasimiento agregado satisfactoriamente.", 'success');
+      return { result: true, data: receipt } as AuditResponse;
+    }, (err: any) => {
+      const ErrorArray = err.message.split("revert ");
+      this.toastService.presentToast(ErrorArray[1], 'danger');
+      return { result: false, data: null } as AuditResponse;
+
+    });
+
+
+  }
+
+
+  async GetProfile(userAddress) {
+
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+    return await this.contract.methods.getUserProfile().call({ from: userAddress }).catch(error => {
+      this.toastService.presentToast(error, 'danger');
+    });;
+  }
+
+  async ListEstablishments() {
+
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+    return await this.contract.methods.listEstablishments().call().catch(error => {
+      this.toastService.presentToast(error, 'danger');
+    });;
+  }
+
+  async auditDocument(establishmentID: string, documentID: string): Promise<any> {
+
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
+    return await this.contract.methods.auditDocument(establishmentID, documentID).call().catch(error => {
+      this.toastService.presentToast(error, 'danger');
+    });;
+    ;
+  }
+
+  async registerDocument(establishmentID: string, docuemtnID: string, docuemtnHash: Buffer): Promise<AuditResponse> {
+    if (this.wallet.balance === "0") {
+      this.toastService.presentToast("No tiene Suficiente Balance", 'danger');
+      return { result: false, data: null } as AuditResponse;
+    }
+
+    if (this.wallet.privateKey == null || this.wallet.privateKey == undefined) {
+      return await this.sendTransactionWithMetamask(this.contract.methods.registerAudit(establishmentID, docuemtnID, docuemtnHash).encodeABI());
 
     }
 
-    async sendTransactionWithMetamask(dataToSend)
-    {
-      let transactionConfig = {
-        to: environment.contractAddress, // Required except during contract publications.
-        from: this.wallet.address, // must match user's active address.
-        data:dataToSend
-      };
 
-   
-      var web3 = await this.walletService.initWeb3Metamask();
-    
-      return await web3.eth.sendTransaction(transactionConfig).then((receipt) => {
-        return  {result:true, data:receipt} as AuditResponse;
-       }).catch((err) => { 
-        const ErrorArray = err.message.split("Tx Signature:");
-        this.toastService.presentToast(ErrorArray[1],'danger'); ; return  {result:false, data:''} as AuditResponse;});
-    } 
+    await this.initWeb3();
+    this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
 
-    async GetProfile(userAddress)
-    {
-
-      await this.initWeb3();
-      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-      return await this.contract.methods.getUserProfile().call({from: userAddress}).catch(error => {
-          this.toastService.presentToast(error,'danger');
-        });;
-    }
-
-    async ListEstablishments()
-    {
-
-      await this.initWeb3();
-      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-      return await this.contract.methods.listEstablishments().call().catch(error => {
-          this.toastService.presentToast(error,'danger');
-        });;
-    }
-
-    async auditDocument(establishmentID:string, documentID:string ):Promise<any>
-    {
-      
-      await this.initWeb3();
-      this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-      return await this.contract.methods.auditDocument(establishmentID,documentID).call().catch(error => {
-          this.toastService.presentToast(error,'danger');
-        });;
-;
-    }
-
-    async registerDocument( establishmentID:string, docuemtnID:string , docuemtnHash:Buffer ):Promise<AuditResponse>
-    {
-        if( this.wallet.balance === "0" )
-        {
-            this.toastService.presentToast("No tiene Suficiente Balance",'danger');
-            return  {result:false, data:null} as AuditResponse;
-        }
-
-        console.log(docuemtnHash.toString())
-
-        if( this.wallet.privateKey == null ||  this.wallet.privateKey == undefined  )
-        {
-           return await this.sendTransactionWithMetamask(this.contract.methods.registerAudit(establishmentID,docuemtnID,docuemtnHash).encodeABI());
-           
-        }
-          
-        
-        await this.initWeb3();
-        this.contract = await new this.web3.eth.Contract(AuditABI.abi, environment.contractAddress);
-
-        var rawData = {
-         from: this.wallet.address,
-         to: environment.contractAddress ,
-         value: 0,
-         gasPrice: this.web3.utils.toHex(10000000000),
-         gasLimit: this.web3.utils.toHex(1000000),
-         nonce: await this.web3.eth.getTransactionCount(this.wallet.address),
-         data: this.contract.methods.registerAudit(establishmentID,docuemtnID,docuemtnHash).encodeABI()
-       };
+    var rawData = {
+      from: this.wallet.address,
+      to: environment.contractAddress,
+      value: 0,
+      gasPrice: this.web3.utils.toHex(10000000000),
+      gasLimit: this.web3.utils.toHex(1000000),
+      nonce: await this.web3.eth.getTransactionCount(this.wallet.address),
+      data: this.contract.methods.registerAudit(establishmentID, docuemtnID, docuemtnHash).encodeABI()
+    };
 
 
-        return  this.web3.eth.sendSignedTransaction(this.walletService.signTransaction(new Transaction(rawData),this.wallet)).then((receipt:any) => {
-           this.toastService.presentToast("Documento agregado satisfactoriamente.",'success');
-           return  {result:true, data:receipt} as AuditResponse;
-         }, (err:any) => {
-            const ErrorArray = err.message.split("revert ");
-            this.toastService.presentToast(ErrorArray[1],'danger');
-            return  {result:false, data:null} as AuditResponse;
+    return this.web3.eth.sendSignedTransaction(this.walletService.signTransaction(new Transaction(rawData), this.wallet)).then((receipt: any) => {
+      this.toastService.presentToast("Documento agregado satisfactoriamente.", 'success');
+      return { result: true, data: receipt } as AuditResponse;
+    }, (err: any) => {
+      const ErrorArray = err.message.split("revert ");
+      this.toastService.presentToast(ErrorArray[1], 'danger');
+      return { result: false, data: null } as AuditResponse;
 
-         });
+    });
 
 
-     }
+  }
+
+  async sendTransactionWithMetamask(dataToSend) {
+    let transactionConfig = {
+      to: environment.contractAddress, // Required except during contract publications.
+      from: this.wallet.address, // must match user's active address.
+      data: dataToSend
+    };
+
+    var web3 = await this.walletService.initWeb3Metamask();
+
+    return await web3.eth.sendTransaction(transactionConfig).then((receipt) => {
+      return { result: true, data: receipt } as AuditResponse;
+    }).catch((err) => {
+      const ErrorArray = err.message.split("Tx Signature:");
+      this.toastService.presentToast(ErrorArray[1], 'danger');; return { result: false, data: '' } as AuditResponse;
+    });
+  }
 
 
 }

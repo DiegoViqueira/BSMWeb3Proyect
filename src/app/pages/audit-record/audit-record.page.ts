@@ -12,12 +12,12 @@ import { CryptograpyService } from 'src/app/services/cryptograpy.service';
 })
 export class AuditRecordPage implements OnInit {
 
-  auditRecordForm:any;
-  fileHash:string;
-  blochainHash:string;
-  establishments:Array<string>;
-  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder ,private auditService: AuditService
-    ,private cryproService: CryptograpyService) {
+  auditRecordForm: any;
+  fileHash: string;
+  blochainHash: string;
+  establishments: Array<string>;
+  constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private auditService: AuditService
+    , private cryproService: CryptograpyService) {
     this.auditRecordForm = this.formBuilder.group({
       establishmentId: ['', Validators.required],
       documentId: ['', Validators.required],
@@ -34,10 +34,9 @@ export class AuditRecordPage implements OnInit {
       this.fileHash = "0x" + this.cryproService.encodeKECCAK256(fileContent.toString()).toString("hex");
     }
   }
- 
-  async audit(auditRecordForm)
-  {
-    this.blochainHash = await this.auditService.auditDocument(auditRecordForm.establishmentId,auditRecordForm.documentId);
+
+  async audit(auditRecordForm) {
+    this.blochainHash = await this.auditService.auditDocument(auditRecordForm.establishmentId, auditRecordForm.documentId);
 
   }
 
